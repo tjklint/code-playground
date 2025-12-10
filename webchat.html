@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📓 Notebook Runner</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #e8e8e8;
+    }
+    
+    .container {
+      text-align: center;
+      padding: 2rem;
+    }
+    
+    h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(90deg, #00d9ff, #00ff88);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .subtitle {
+      font-size: 1.2rem;
+      color: #888;
+      margin-bottom: 2rem;
+    }
+    
+    .features {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+    
+    .feature {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 1.5rem;
+      width: 200px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .feature:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 40px rgba(0,217,255,0.2);
+    }
+    
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .feature-title {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+    
+    .feature-desc {
+      font-size: 0.85rem;
+      color: #888;
+    }
+    
+    .hint {
+      font-size: 0.9rem;
+      color: #666;
+      margin-top: 2rem;
+    }
+    
+    .hint code {
+      background: rgba(0,217,255,0.2);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      color: #00d9ff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📓 Notebook Runner</h1>
+    <p class="subtitle">An interactive code assistant powered by Botpress ADK</p>
+    
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon">⚡</div>
+        <div class="feature-title">JavaScript</div>
+        <div class="feature-desc">Execute JS code in Node.js</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🐍</div>
+        <div class="feature-title">Python</div>
+        <div class="feature-desc">Run Python with numpy & matplotlib</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🔢</div>
+        <div class="feature-title">Calculations</div>
+        <div class="feature-desc">Fibonacci, factorials, sums...</div>
+      </div>
+    </div>
+    
+    <p class="hint">Click the chat bubble → Try: <code>What is fibonacci(20)?</code></p>
+  </div>
+
+  <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js"></script>
+  <script src="https://files.bpcontent.cloud/2025/12/10/03/20251210034017-RWL0JKIE.js" defer></script>
+</body>
+</html>
+
