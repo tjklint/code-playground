@@ -45,18 +45,74 @@ function typeOutput() {
 // Start typing animation after a short delay
 setTimeout(typeOutput, 1000);
 
+// === Chat State ===
+let isChatOpen = false;
+
+// === Toggle Chat Function ===
+function toggleChat() {
+  const fab = document.getElementById('chat-fab');
+  
+  if (isChatOpen) {
+    // Close the chat
+    if (window.botpress) {
+      window.botpress.close();
+    }
+    fab?.classList.remove('is-open');
+    isChatOpen = false;
+  } else {
+    // Open the chat
+    if (window.botpress) {
+      window.botpress.open();
+    }
+    fab?.classList.add('is-open');
+    isChatOpen = true;
+  }
+}
+
+// === Custom FAB Click Handler ===
+const chatFab = document.getElementById('chat-fab');
+if (chatFab) {
+  chatFab.addEventListener('click', toggleChat);
+}
+
 // === CTA Button - Open Webchat ===
 const ctaButton = document.getElementById('open-chat');
 if (ctaButton) {
   ctaButton.addEventListener('click', () => {
-    // Try to open the Botpress webchat
-    if (window.botpress) {
-      window.botpress.open();
-    } else if (window.botpressWebChat) {
-      window.botpressWebChat.sendEvent({ type: 'show' });
+    const fab = document.getElementById('chat-fab');
+    if (!isChatOpen) {
+      if (window.botpress) {
+        window.botpress.open();
+      }
+      fab?.classList.add('is-open');
+      isChatOpen = true;
     }
   });
 }
+
+// === Listen for Webchat Close Events ===
+// Sync our FAB state when user closes chat via the webchat's own close button
+function setupWebchatListener() {
+  if (window.botpress) {
+    window.botpress.on('webchat:closed', () => {
+      const fab = document.getElementById('chat-fab');
+      fab?.classList.remove('is-open');
+      isChatOpen = false;
+    });
+    
+    window.botpress.on('webchat:opened', () => {
+      const fab = document.getElementById('chat-fab');
+      fab?.classList.add('is-open');
+      isChatOpen = true;
+    });
+  } else {
+    // Retry after a short delay if botpress isn't ready yet
+    setTimeout(setupWebchatListener, 500);
+  }
+}
+
+// Initialize listener after a short delay to ensure webchat is loaded
+setTimeout(setupWebchatListener, 1000);
 
 // === Example Chips - Copy to Clipboard & Open Chat ===
 const exampleChips = document.querySelectorAll('.example-chip');

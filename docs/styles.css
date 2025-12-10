@@ -470,8 +470,211 @@ body {
   }
 }
 
-/* === Webchat Customization === */
-.bpw-floating-button {
-  box-shadow: 0 4px 24px rgba(0, 229, 255, 0.3) !important;
+/* === Hide Default Botpress FAB === */
+.bpFab,
+.bpw-floating-button,
+[class*="bpFab"],
+button[class*="Fab"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* === Custom Chat FAB === */
+.chat-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  width: 64px;
+  height: 64px;
+  border: none;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00e5ff 0%, #00ff9d 100%);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 
+    0 4px 20px rgba(0, 229, 255, 0.4),
+    0 0 40px rgba(0, 255, 157, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+  overflow: visible;
+}
+
+.chat-fab:hover {
+  transform: scale(1.08);
+  box-shadow: 
+    0 6px 30px rgba(0, 229, 255, 0.5),
+    0 0 60px rgba(0, 255, 157, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.chat-fab:active {
+  transform: scale(0.95);
+}
+
+.chat-fab.is-open {
+  background: linear-gradient(135deg, #ff3d8a 0%, #b24dff 100%);
+  box-shadow: 
+    0 4px 20px rgba(255, 61, 138, 0.4),
+    0 0 40px rgba(178, 77, 255, 0.2);
+}
+
+.chat-fab.is-open:hover {
+  box-shadow: 
+    0 6px 30px rgba(255, 61, 138, 0.5),
+    0 0 60px rgba(178, 77, 255, 0.3);
+}
+
+/* FAB Icon Container */
+.fab-icon-container {
+  position: relative;
+  width: 28px;
+  height: 28px;
+}
+
+.fab-icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 28px;
+  height: 28px;
+  color: var(--bg-primary);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.fab-icon-default {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+.fab-icon-close {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.5);
+}
+
+.chat-fab.is-open .fab-icon-default {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.5);
+}
+
+.chat-fab.is-open .fab-icon-close {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+/* Ping Animation */
+.fab-ping {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00e5ff 0%, #00ff9d 100%);
+  animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  opacity: 0;
+}
+
+.chat-fab.is-open .fab-ping {
+  display: none;
+}
+
+@keyframes ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  75%, 100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+/* Orbit Ring */
+.fab-ring {
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 2px dashed rgba(0, 229, 255, 0.3);
+  animation: spin 20s linear infinite;
+  pointer-events: none;
+}
+
+.chat-fab.is-open .fab-ring {
+  border-color: rgba(178, 77, 255, 0.3);
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Tooltip */
+.chat-fab::before {
+  content: 'Run some code!';
+  position: absolute;
+  right: calc(100% + 16px);
+  top: 50%;
+  transform: translateY(-50%) translateX(10px);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.chat-fab::after {
+  content: '';
+  position: absolute;
+  right: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%) translateX(10px);
+  border: 6px solid transparent;
+  border-left-color: var(--bg-secondary);
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.chat-fab:hover::before,
+.chat-fab:hover::after {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+.chat-fab.is-open::before {
+  content: 'Close chat';
+}
+
+/* Mobile adjustments */
+@media (max-width: 640px) {
+  .chat-fab {
+    width: 56px;
+    height: 56px;
+    bottom: 16px;
+    right: 16px;
+  }
+  
+  .fab-icon-container {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .fab-icon {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .chat-fab::before,
+  .chat-fab::after {
+    display: none;
+  }
 }
 
