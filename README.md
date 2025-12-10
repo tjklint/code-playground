@@ -1,8 +1,18 @@
-# code-playground
+# ⚡ Code Playground
 
-A Botpress Agent built with the ADK.
+An AI-powered interactive code playground. Execute Python and JavaScript through natural conversation.
+
+**[Try the Live Demo →](https://tjklint.github.io/code-playground)**
+
+## Features
+
+- 🐍 **Python** — Full runtime with numpy, matplotlib, and more
+- ⚡ **JavaScript** — Node.js environment with ES6+ support
+- 🧠 **AI-Powered** — Natural language code execution
 
 ## Getting Started
+
+### Agent Development
 
 1. Install dependencies:
 
@@ -21,14 +31,54 @@ A Botpress Agent built with the ADK.
    adk deploy
    ```
 
+### Frontend (GitHub Pages)
+
+The frontend lives in the `docs/` folder and is ready for GitHub Pages.
+
+1. Push your code to GitHub
+
+2. Go to your repository **Settings** → **Pages**
+
+3. Under "Build and deployment":
+   - **Source**: Deploy from a branch
+   - **Branch**: `main` (or your default branch)
+   - **Folder**: `/docs`
+
+4. Click **Save** — your site will be live at:
+   ```
+   https://YOUR_USERNAME.github.io/code-playground
+   ```
+
+### Local Preview
+
+To preview the frontend locally, serve the `docs/` folder:
+
+```bash
+# Using Python
+python -m http.server 8000 -d docs
+
+# Or using npx
+npx serve docs
+```
+
+Then open http://localhost:8000
+
 ## Project Structure
 
-- `src/actions/` - Define callable functions
-- `src/workflows/` - Define long-running processes
-- `src/conversations/` - Define conversation handlers
-- `src/tables/` - Define data storage schemas
-- `src/triggers/` - Define event subscriptions
-- `src/knowledge/` - Add knowledge base files
+```
+├── docs/              # GitHub Pages frontend
+│   ├── index.html
+│   ├── styles.css
+│   └── app.js
+├── src/
+│   ├── actions/       # Callable functions (run_js, run_python)
+│   ├── workflows/     # Long-running processes
+│   ├── conversations/ # Conversation handlers
+│   ├── tables/        # Data storage schemas
+│   ├── triggers/      # Event subscriptions
+│   └── knowledge/     # Knowledge base files
+└── webchat.html       # Simple embedded webchat (legacy)
+```
 
 ## Learn More
 
