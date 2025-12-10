@@ -135,9 +135,13 @@ exampleChips.forEach(chip => {
       }, 1000);
     });
     
-    // Open webchat
-    if (window.botpress) {
-      window.botpress.open();
+    if (!isChatOpen) {
+      const fab = document.getElementById('chat-fab');
+      if (window.botpress) {
+        window.botpress.open();
+      }
+      fab?.classList.add('is-open');
+      isChatOpen = true;
     }
   });
 });
