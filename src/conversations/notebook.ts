@@ -25,7 +25,7 @@ export default new Conversation({
         console.log(`\n🟡 [runJs] EXECUTING:\n${code.substring(0, 200)}${code.length > 200 ? '...' : ''}\n`);
         const startTime = Date.now();
 
-        return new Promise<{ success: boolean; result: string; logs: string[]; executionTime: string }>((resolve) => {
+        return new Promise<{ success: boolean; result: string; code: string; language: string; executionTimeMs: number }>((resolve) => {
           // Use -p flag to print the result of the last expression
           // Also capture console.log output separately
           const node = spawn("node", ["-p", code], { timeout: 5000 });
@@ -37,15 +37,17 @@ export default new Conversation({
 
           node.on("close", (exitCode) => {
             const result = stdout.trim() || "undefined";
+            const execTime = Date.now() - startTime;
 
             const output = {
               success: exitCode === 0,
               result: exitCode === 0 ? result : stderr.trim(),
-              logs: [] as string[],
-              executionTime: `${Date.now() - startTime}ms`,
+              code: code,
+              language: "javascript",
+              executionTimeMs: execTime,
             };
             
-            console.log(`🟢 [runJs] RESULT: ${output.success ? '✓' : '✗'} (${output.executionTime})`);
+            console.log(`🟢 [runJs] RESULT: ${output.success ? '✓' : '✗'} (${execTime}ms)`);
             console.log(`   → ${String(output.result).substring(0, 100)}${String(output.result).length > 100 ? '...' : ''}\n`);
             
             resolve(output);
@@ -56,8 +58,9 @@ export default new Conversation({
             resolve({
               success: false,
               result: `Failed to run Node.js: ${err.message}`,
-              logs: [],
-              executionTime: `${Date.now() - startTime}ms`,
+              code: code,
+              language: "javascript",
+              executionTimeMs: Date.now() - startTime,
             });
           });
         });
@@ -76,7 +79,7 @@ export default new Conversation({
         console.log(`\n🟡 [runPython] EXECUTING:\n${code.substring(0, 200)}${code.length > 200 ? '...' : ''}\n`);
         const startTime = Date.now();
 
-        return new Promise<{ success: boolean; stdout: string; stderr: string; executionTime: string }>((resolve) => {
+        return new Promise<{ success: boolean; result: string; code: string; language: string; executionTimeMs: number }>((resolve) => {
           const wrappedCode = `
 import math
 import json
@@ -101,15 +104,17 @@ ${code}
           python.stderr.on("data", (data) => { stderr += data.toString(); });
 
           python.on("close", (exitCode) => {
+            const execTime = Date.now() - startTime;
             const output = {
               success: exitCode === 0,
-              stdout: stdout.trim(),
-              stderr: stderr.trim(),
-              executionTime: `${Date.now() - startTime}ms`,
+              result: exitCode === 0 ? stdout.trim() : stderr.trim(),
+              code: code,
+              language: "python",
+              executionTimeMs: execTime,
             };
             
-            console.log(`🟢 [runPython] RESULT: ${output.success ? '✓' : '✗'} (${output.executionTime})`);
-            console.log(`   → ${output.stdout.substring(0, 100)}${output.stdout.length > 100 ? '...' : ''}\n`);
+            console.log(`🟢 [runPython] RESULT: ${output.success ? '✓' : '✗'} (${execTime}ms)`);
+            console.log(`   → ${output.result.substring(0, 100)}${output.result.length > 100 ? '...' : ''}\n`);
             
             resolve(output);
           });
@@ -118,9 +123,10 @@ ${code}
             console.log(`🔴 [runPython] ERROR: ${err.message}\n`);
             resolve({
               success: false,
-              stdout: "",
-              stderr: `Failed to run Python: ${err.message}`,
-              executionTime: `${Date.now() - startTime}ms`,
+              result: `Failed to run Python: ${err.message}`,
+              code: code,
+              language: "python",
+              executionTimeMs: Date.now() - startTime,
             });
           });
         });
@@ -137,18 +143,34 @@ TOOLS AVAILABLE:
 
 RULES:
 1. When asked to calculate or compute something, ALWAYS use a tool - never answer from memory
-2. After getting the tool result, respond with a simple sentence like "The answer is X"
-3. DO NOT use code blocks, JSX, or special formatting in your response - just plain text
-4. For Fibonacci, factorials, sums, etc. - write and run the actual code
+2. After getting the tool result, format your response nicely showing the result AND the code
+3. For Fibonacci, factorials, sums, etc. - write and run the actual code
 
 IMPORTANT FOR runJs:
 - Code must END with an expression (no semicolon) to return a value
 - GOOD: "const fact = n => n <= 1 ? 1 : n * fact(n-1); fact(5)" → returns 120
 
-RESPONSE FORMAT:
-- Keep responses simple and plain text
-- Example: "Fibonacci(20) = 6765" or "The factorial of 5 is 120"
-- NO code blocks, NO markdown, NO JSX in your final answer`,
+RESPONSE FORMAT - Use this exact format:
+**Result:** [the computed value]
+
+<details>
+<summary>📝 View Code ([language], [executionTimeMs]ms)</summary>
+
+\`\`\`[language]
+[the code that was executed]
+\`\`\`
+</details>
+
+Example response:
+**Result:** 6765
+
+<details>
+<summary>📝 View Code (javascript, 28ms)</summary>
+
+\`\`\`javascript
+const fib = n => n <= 1 ? n : fib(n-1) + fib(n-2); fib(20)
+\`\`\`
+</details>`,
       tools: [runJsTool, runPythonTool],
     });
   },
