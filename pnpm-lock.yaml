@@ -11,6 +11,9 @@ importers:
       '@botpress/runtime':
         specifier: ^1.11.0
         version: 1.11.0(typescript@5.9.3)
+      '@botpress/sdk':
+        specifier: ^5.0.0
+        version: 5.0.0(@bpinternal/zui@1.2.3)
     devDependencies:
       typescript:
         specifier: ^5.9.3
@@ -177,6 +180,16 @@ packages:
 
   '@botpress/sdk@4.21.0':
     resolution: {integrity: sha512-Jj6FgVFI6uE5vrgf6FcZhbDXRlQkgRti54Zodm+V49vQx/Uym3Ro1ifZmcfcrNWfp8HcJ840yEcKnLJK5f3GtQ==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      '@bpinternal/zui': 1.2.1
+      esbuild: ^0.16.12
+    peerDependenciesMeta:
+      esbuild:
+        optional: true
+
+  '@botpress/sdk@5.0.0':
+    resolution: {integrity: sha512-T9XXAVCOpj+SA6uK30YEvMcBwwtjki/mWHeJDjd7dOyCNdiv5f8zYhNaQPKgPISBaQ8u0QaFFRFEmglyUiLv4A==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       '@bpinternal/zui': 1.2.1
@@ -1051,6 +1064,15 @@ snapshots:
       - supports-color
 
   '@botpress/sdk@4.21.0(@bpinternal/zui@1.2.3)':
+    dependencies:
+      '@botpress/client': 1.27.2
+      '@bpinternal/zui': 1.2.3
+      browser-or-node: 2.1.1
+      semver: 7.7.3
+    transitivePeerDependencies:
+      - debug
+
+  '@botpress/sdk@5.0.0(@bpinternal/zui@1.2.3)':
     dependencies:
       '@botpress/client': 1.27.2
       '@bpinternal/zui': 1.2.3

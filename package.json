@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "A Botpress Agent built with the ADK",
   "type": "module",
-  "packageManager": "pnpm@latest",
+
+  "packageManager": "pnpm@9.15.0",
   "scripts": {
     "dev": "adk dev",
     "build": "adk build",
