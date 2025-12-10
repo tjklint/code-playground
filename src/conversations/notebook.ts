@@ -150,27 +150,21 @@ IMPORTANT FOR runJs:
 - Code must END with an expression (no semicolon) to return a value
 - GOOD: "const fact = n => n <= 1 ? 1 : n * fact(n-1); fact(5)" → returns 120
 
-RESPONSE FORMAT - Use this exact format:
+RESPONSE FORMAT:
 **Result:** [the computed value]
-
-<details>
-<summary>📝 View Code ([language], [executionTimeMs]ms)</summary>
 
 \`\`\`[language]
 [the code that was executed]
 \`\`\`
-</details>
+_Executed in [executionTimeMs]ms_
 
 Example response:
 **Result:** 6765
 
-<details>
-<summary>📝 View Code (javascript, 28ms)</summary>
-
 \`\`\`javascript
 const fib = n => n <= 1 ? n : fib(n-1) + fib(n-2); fib(20)
 \`\`\`
-</details>`,
+_Executed in 28ms_`,
       tools: [runJsTool, runPythonTool],
     });
   },
