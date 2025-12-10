@@ -1,4 +1,7 @@
-// === Typing Animation ===
+// === Chat State (declared early for use in animations) ===
+let isChatOpen = false;
+
+// === Hero Typing Animation ===
 const outputElement = document.getElementById('typing-output');
 const outputs = [
   '6765',
@@ -42,67 +45,155 @@ function typeOutput() {
   }
 }
 
-// Start typing animation after a short delay
+// Start hero typing animation after a short delay
 setTimeout(typeOutput, 1000);
 
-// === Chat State ===
-let isChatOpen = false;
+// === Mini Terminal Animation ===
+const miniCodeElement = document.getElementById('mini-code-text');
+const miniOutputElement = document.getElementById('mini-output');
+const miniTerminal = document.getElementById('chat-fab');
+
+const terminalCommands = [
+  { code: 'fib(20)', output: '→ 6765', duration: 800 },
+  { code: 'sum(1,100)', output: '→ 5050', duration: 600 },
+  { code: 'isPrime(997)', output: '→ true', duration: 500 },
+  { code: 'factorial(10)', output: '→ 3628800', duration: 700 },
+  { code: 'sqrt(144)', output: '→ 12', duration: 400 },
+  { code: 'random()', output: '→ 0.4281', duration: 300 },
+];
+
+let terminalIndex = 0;
+let miniCharIndex = 0;
+let miniPhase = 'typing'; // 'typing', 'running', 'output', 'pause', 'clearing'
+
+function animateMiniTerminal() {
+  // Don't animate if chat is open
+  if (isChatOpen) {
+    miniCodeElement.textContent = 'chat open...';
+    miniOutputElement.textContent = '';
+    miniOutputElement.classList.remove('show');
+    setTimeout(animateMiniTerminal, 1000);
+    return;
+  }
+
+  const currentCmd = terminalCommands[terminalIndex];
+  
+  switch (miniPhase) {
+    case 'typing':
+      if (miniCharIndex < currentCmd.code.length) {
+        miniCodeElement.textContent = currentCmd.code.substring(0, miniCharIndex + 1);
+        miniCharIndex++;
+        setTimeout(animateMiniTerminal, 70 + Math.random() * 50);
+      } else {
+        miniPhase = 'running';
+        miniTerminal.classList.add('is-running');
+        document.querySelector('.status-text').textContent = 'running';
+        setTimeout(animateMiniTerminal, currentCmd.duration);
+      }
+      break;
+      
+    case 'running':
+      miniPhase = 'output';
+      miniTerminal.classList.remove('is-running');
+      document.querySelector('.status-text').textContent = 'done';
+      miniOutputElement.textContent = currentCmd.output;
+      miniOutputElement.classList.add('show');
+      setTimeout(animateMiniTerminal, 2000);
+      break;
+      
+    case 'output':
+      miniPhase = 'clearing';
+      miniOutputElement.classList.remove('show');
+      document.querySelector('.status-text').textContent = 'ready';
+      setTimeout(animateMiniTerminal, 300);
+      break;
+      
+    case 'clearing':
+      miniPhase = 'typing';
+      miniCharIndex = 0;
+      miniCodeElement.textContent = '';
+      miniOutputElement.textContent = '';
+      terminalIndex = (terminalIndex + 1) % terminalCommands.length;
+      setTimeout(animateMiniTerminal, 500);
+      break;
+  }
+}
+
+// Start mini terminal animation
+setTimeout(animateMiniTerminal, 1500);
 
 // === Toggle Chat Function ===
 function toggleChat() {
-  const fab = document.getElementById('chat-fab');
+  const terminal = document.getElementById('chat-fab');
+  const statusText = document.querySelector('.status-text');
   
   if (isChatOpen) {
     // Close the chat
     if (window.botpress) {
       window.botpress.close();
     }
-    fab?.classList.remove('is-open');
+    terminal?.classList.remove('is-open');
+    if (statusText) statusText.textContent = 'ready';
     isChatOpen = false;
   } else {
     // Open the chat
     if (window.botpress) {
       window.botpress.open();
     }
-    fab?.classList.add('is-open');
+    terminal?.classList.add('is-open');
+    if (statusText) statusText.textContent = 'connected';
     isChatOpen = true;
   }
 }
 
-// === Custom FAB Click Handler ===
+// === Mini Terminal Click Handler ===
 const chatFab = document.getElementById('chat-fab');
 if (chatFab) {
   chatFab.addEventListener('click', toggleChat);
+  
+  // Also handle keyboard activation
+  chatFab.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      toggleChat();
+    }
+  });
 }
 
 // === CTA Button - Open Webchat ===
 const ctaButton = document.getElementById('open-chat');
 if (ctaButton) {
   ctaButton.addEventListener('click', () => {
-    const fab = document.getElementById('chat-fab');
+    const terminal = document.getElementById('chat-fab');
+    const statusText = document.querySelector('.status-text');
     if (!isChatOpen) {
       if (window.botpress) {
         window.botpress.open();
       }
-      fab?.classList.add('is-open');
+      terminal?.classList.add('is-open');
+      if (statusText) statusText.textContent = 'connected';
       isChatOpen = true;
     }
   });
 }
 
 // === Listen for Webchat Close Events ===
-// Sync our FAB state when user closes chat via the webchat's own close button
+// Sync our terminal state when user closes chat via the webchat's own close button
 function setupWebchatListener() {
   if (window.botpress) {
     window.botpress.on('webchat:closed', () => {
-      const fab = document.getElementById('chat-fab');
-      fab?.classList.remove('is-open');
+      const terminal = document.getElementById('chat-fab');
+      const statusText = document.querySelector('.status-text');
+      terminal?.classList.remove('is-open');
+      if (statusText) statusText.textContent = 'ready';
       isChatOpen = false;
     });
     
     window.botpress.on('webchat:opened', () => {
-      const fab = document.getElementById('chat-fab');
-      fab?.classList.add('is-open');
+      const terminal = document.getElementById('chat-fab');
+      const statusText = document.querySelector('.status-text');
+      terminal?.classList.add('is-open');
+      if (statusText) statusText.textContent = 'connected';
       isChatOpen = true;
     });
   } else {
@@ -136,11 +227,13 @@ exampleChips.forEach(chip => {
     });
     
     if (!isChatOpen) {
-      const fab = document.getElementById('chat-fab');
+      const terminal = document.getElementById('chat-fab');
+      const statusText = document.querySelector('.status-text');
       if (window.botpress) {
         window.botpress.open();
       }
-      fab?.classList.add('is-open');
+      terminal?.classList.add('is-open');
+      if (statusText) statusText.textContent = 'connected';
       isChatOpen = true;
     }
   });

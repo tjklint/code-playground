@@ -131,23 +131,29 @@
     <p>Built with <a href="https://botpress.com" target="_blank" rel="noopener">Botpress ADK</a></p>
   </footer>
 
-  <!-- Custom Chat FAB -->
-  <button class="chat-fab" id="chat-fab" aria-label="Open chat">
-    <div class="fab-icon-container">
-      <!-- Terminal/Code Icon -->
-      <svg class="fab-icon fab-icon-default" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="4 17 10 11 4 5"></polyline>
-        <line x1="12" y1="19" x2="20" y2="19"></line>
-      </svg>
-      <!-- Close Icon -->
-      <svg class="fab-icon fab-icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="18" y1="6" x2="6" y2="18"></line>
-        <line x1="6" y1="6" x2="18" y2="18"></line>
-      </svg>
+  <div class="mini-terminal" id="chat-fab" role="button" tabindex="0" aria-label="Open chat">
+    <div class="mini-terminal-header">
+      <div class="mini-terminal-dots">
+        <span class="mini-dot red"></span>
+        <span class="mini-dot yellow"></span>
+        <span class="mini-dot green"></span>
+      </div>
+      <span class="mini-terminal-title">playground</span>
     </div>
-    <div class="fab-ping"></div>
-    <div class="fab-ring"></div>
-  </button>
+    <div class="mini-terminal-body">
+      <div class="mini-terminal-line">
+        <span class="mini-prompt">❯</span>
+        <span class="mini-code" id="mini-code-text"></span>
+        <span class="mini-cursor">▋</span>
+      </div>
+      <div class="mini-terminal-output" id="mini-output"></div>
+    </div>
+    <div class="mini-terminal-status">
+      <span class="status-dot"></span>
+      <span class="status-text">ready</span>
+    </div>
+    <div class="mini-terminal-glow"></div>
+  </div>
 
   <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js"></script>
   <script src="https://files.bpcontent.cloud/2025/12/10/03/20251210034017-RWL0JKIE.js" defer></script>
