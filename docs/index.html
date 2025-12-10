@@ -131,26 +131,27 @@
     <p>Built with <a href="https://botpress.com" target="_blank" rel="noopener">Botpress ADK</a></p>
   </footer>
 
-  <div class="mini-terminal" id="chat-fab" role="button" tabindex="0" aria-label="Open chat">
-    <div class="mini-terminal-header">
-      <div class="mini-terminal-dots">
-        <span class="mini-dot red"></span>
-        <span class="mini-dot yellow"></span>
-        <span class="mini-dot green"></span>
+  <!-- Mini Terminal - with inline critical styles as fallback -->
+  <div class="mini-terminal" id="chat-fab" role="button" tabindex="0" aria-label="Open chat" style="position:fixed;bottom:24px;right:24px;z-index:9999;width:180px;background:#0d1117;border-radius:12px;border:1px solid rgba(0,229,255,0.3);cursor:pointer;font-family:monospace;">
+    <div class="mini-terminal-header" style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:#161b22;border-bottom:1px solid rgba(255,255,255,0.06);">
+      <div class="mini-terminal-dots" style="display:flex;gap:4px;">
+        <span class="mini-dot red" style="width:8px;height:8px;border-radius:50%;background:#ff5f57;"></span>
+        <span class="mini-dot yellow" style="width:8px;height:8px;border-radius:50%;background:#febc2e;"></span>
+        <span class="mini-dot green" style="width:8px;height:8px;border-radius:50%;background:#28c840;"></span>
       </div>
-      <span class="mini-terminal-title">playground</span>
+      <span class="mini-terminal-title" style="font-size:9px;color:#6e7681;letter-spacing:0.5px;text-transform:uppercase;">playground</span>
     </div>
-    <div class="mini-terminal-body">
-      <div class="mini-terminal-line">
-        <span class="mini-prompt">❯</span>
-        <span class="mini-code" id="mini-code-text"></span>
-        <span class="mini-cursor">▋</span>
+    <div class="mini-terminal-body" style="padding:8px 10px;min-height:44px;">
+      <div class="mini-terminal-line" style="display:flex;align-items:center;gap:6px;font-size:11px;line-height:1.4;">
+        <span class="mini-prompt" style="color:#00e5ff;font-weight:600;">❯</span>
+        <span class="mini-code" id="mini-code-text" style="color:#e6edf3;white-space:nowrap;overflow:hidden;"></span>
+        <span class="mini-cursor" style="color:#00e5ff;">▋</span>
       </div>
-      <div class="mini-terminal-output" id="mini-output"></div>
+      <div class="mini-terminal-output" id="mini-output" style="font-size:10px;color:#00ff9d;margin-top:4px;padding-left:16px;min-height:14px;"></div>
     </div>
-    <div class="mini-terminal-status">
-      <span class="status-dot"></span>
-      <span class="status-text">ready</span>
+    <div class="mini-terminal-status" style="display:flex;align-items:center;gap:6px;padding:5px 10px;background:#161b22;border-top:1px solid rgba(255,255,255,0.06);font-size:9px;">
+      <span class="status-dot" style="width:6px;height:6px;border-radius:50%;background:#00ff9d;"></span>
+      <span class="status-text" style="color:#6e7681;text-transform:uppercase;letter-spacing:0.5px;">ready</span>
     </div>
     <div class="mini-terminal-glow"></div>
   </div>
