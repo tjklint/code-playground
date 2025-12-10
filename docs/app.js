@@ -152,6 +152,11 @@ document.addEventListener('DOMContentLoaded', function() {
       if (miniTerminal) miniTerminal.classList.add('is-open');
       updateStatusText('connected');
       isChatOpen = true;
+      
+      // Also try to open the floating widget as fallback
+      if (window.botpress && typeof window.botpress.open === 'function') {
+        window.botpress.open();
+      }
     }
   }
 
