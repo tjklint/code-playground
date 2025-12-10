@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Code Playground | Interactive Code Runner</title>
-  <meta name="description" content="An AI-powered interactive code playground. Execute Python and JavaScript code through natural conversation.">
+  <meta name="description" content="An AI-powered interactive code playground. Execute JavaScript and TypeScript code through natural conversation.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,28 +39,28 @@
             <span class="dot yellow"></span>
             <span class="dot green"></span>
           </div>
-          <span class="terminal-title">playground.py</span>
+          <span class="terminal-title">playground.js</span>
         </div>
         <div class="terminal-body">
           <div class="code-line">
             <span class="line-number">1</span>
-            <span class="code"><span class="keyword">from</span> <span class="module">playground</span> <span class="keyword">import</span> <span class="func">ask</span></span>
+            <span class="code"><span class="keyword">const</span> <span class="var">fib</span> = <span class="var">n</span> <span class="keyword">=&gt;</span> <span class="var">n</span> &lt;= <span class="number">1</span> ? <span class="var">n</span></span>
           </div>
           <div class="code-line">
             <span class="line-number">2</span>
-            <span class="code"></span>
+            <span class="code">  : <span class="func">fib</span>(<span class="var">n</span>-<span class="number">1</span>) + <span class="func">fib</span>(<span class="var">n</span>-<span class="number">2</span>);</span>
           </div>
           <div class="code-line">
             <span class="line-number">3</span>
-            <span class="code"><span class="comment"># Ask anything, run any code</span></span>
+            <span class="code"></span>
           </div>
           <div class="code-line">
             <span class="line-number">4</span>
-            <span class="code"><span class="var">result</span> = <span class="func">ask</span>(<span class="string">"What is fibonacci(20)?"</span>)</span>
+            <span class="code"><span class="comment">// Ask in plain English, get real results</span></span>
           </div>
           <div class="code-line">
             <span class="line-number">5</span>
-            <span class="code"><span class="builtin">print</span>(result)  <span class="comment"># → 6765</span></span>
+            <span class="code"><span class="builtin">console</span>.<span class="func">log</span>(<span class="func">fib</span>(<span class="number">20</span>));  <span class="comment">// → 6765</span></span>
           </div>
           <div class="code-line output">
             <span class="line-number">▸</span>
@@ -74,8 +74,8 @@
         <span class="gradient-text">conversation</span>
       </h1>
       <p class="hero-subtitle">
-        An AI-powered playground that executes Python and JavaScript. 
-        Ask questions, run calculations, generate visualizations—all through natural language.
+        An AI-powered playground that executes JavaScript code in real-time. 
+        Ask questions, run calculations, solve algorithms—all through natural language.
       </p>
       
       <button class="cta-button" id="open-chat">
@@ -87,22 +87,22 @@
 
     <section class="features">
       <div class="feature-card">
-        <div class="feature-glow python"></div>
-        <div class="feature-icon">🐍</div>
-        <h3 class="feature-title">Python</h3>
-        <p class="feature-desc">Full Python runtime with numpy, matplotlib, and more. Generate charts, crunch numbers, analyze data.</p>
+        <div class="feature-glow js"></div>
+        <div class="feature-icon">⚡</div>
+        <h3 class="feature-title">JavaScript</h3>
+        <p class="feature-desc">Full Node.js runtime. ES6+ support, modern syntax, and real code execution.</p>
         <div class="feature-example">
-          <code>Plot sin(x) from 0 to 2π</code>
+          <code>Sort [3,1,4,1,5,9] descending</code>
         </div>
       </div>
 
       <div class="feature-card">
-        <div class="feature-glow js"></div>
-        <div class="feature-icon">⚡</div>
-        <h3 class="feature-title">JavaScript</h3>
-        <p class="feature-desc">Node.js environment for scripting, calculations, and data manipulation. Modern ES6+ support.</p>
+        <div class="feature-glow ts"></div>
+        <div class="feature-icon">🔷</div>
+        <h3 class="feature-title">TypeScript</h3>
+        <p class="feature-desc">Type-safe code with full TypeScript support. Write cleaner, more reliable code.</p>
         <div class="feature-example">
-          <code>Sort [3,1,4,1,5,9] descending</code>
+          <code>Create a typed factorial function</code>
         </div>
       </div>
 
@@ -131,7 +131,7 @@
 
     <section class="chat-section" id="chat">
       <h2 class="section-title">Start Coding</h2>
-      <p class="chat-subtitle">Ask me to run any code — Python, JavaScript, calculations, and more.</p>
+      <p class="chat-subtitle">Ask me to run any JavaScript code — calculations, algorithms, data transformations, and more.</p>
       <div class="chat-container">
         <!-- Botpress Embedded Chat Container -->
         <!-- Configure in Botpress Dashboard: Webchat → Deploy Settings → Chat Interface = "Embedded" -->

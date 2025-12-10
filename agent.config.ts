@@ -3,8 +3,8 @@ import { z, defineConfig } from "@botpress/runtime";
 export default defineConfig({
   name: "code-playground",
   description:
-    "Simple Notebook Runner - An interactive code assistant that can execute JavaScript and Python code. " +
-    "Ask me to calculate Fibonacci sequences, plot sine waves, process data, or run any code snippet!",
+    "Code Playground - An interactive code assistant that executes JavaScript code. " +
+    "Ask me to calculate Fibonacci sequences, solve algorithms, process data, or run any JS code snippet!",
 
   defaultModels: {
     autonomous: "openai:gpt-4o",

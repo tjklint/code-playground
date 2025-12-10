@@ -18,9 +18,9 @@ document.addEventListener('DOMContentLoaded', function() {
   // === Hero Typing Animation ===
   const outputs = [
     '6765',
-    'Running code...',
-    '✓ fibonacci(20) = 6765',
-    'Done in 0.02ms'
+    'Running Node.js...',
+    '✓ Result: 6765',
+    'Executed in 28ms'
   ];
 
   let outputIndex = 0;

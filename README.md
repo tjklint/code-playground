@@ -1,13 +1,13 @@
 # ⚡ Code Playground
 
-An AI-powered interactive code playground. Execute Python and JavaScript through natural conversation.
+An AI-powered interactive code playground. Execute JavaScript code through natural conversation.
 
 **[Try the Live Demo →](https://tjklint.github.io/code-playground)**
 
 ## Features
 
-- 🐍 **Python** — Full runtime with numpy, matplotlib, and more
-- ⚡ **JavaScript** — Node.js environment with ES6+ support
+- ⚡ **JavaScript** — Full Node.js runtime with ES6+ support
+- 🔷 **TypeScript** — Type-safe code execution
 - 🧠 **AI-Powered** — Natural language code execution
 
 ## Getting Started
@@ -71,7 +71,7 @@ Then open http://localhost:8000
 │   ├── styles.css
 │   └── app.js
 ├── src/
-│   ├── actions/       # Callable functions (run_js, run_python)
+│   ├── actions/       # Callable functions (run_js)
 │   ├── workflows/     # Long-running processes
 │   ├── conversations/ # Conversation handlers
 │   ├── tables/        # Data storage schemas

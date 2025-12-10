@@ -1,7 +1,7 @@
 /**
- * Simple Notebook Runner Actions
+ * Code Playground Actions
  *
- * MCP tools that execute code and return results.
+ * Tools that execute JavaScript code and return results.
  * Turn Botpress into an interactive code assistant!
  *
  * Actions are auto-discovered from individual files in this directory.
