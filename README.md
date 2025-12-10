@@ -82,5 +82,6 @@ Then open http://localhost:8000
 
 ## Learn More
 
+- [Botpress ADK](https://github.com/botpress/adk)
 - [ADK Documentation](https://botpress.com/docs/adk)
 - [Botpress Platform](https://botpress.com)
