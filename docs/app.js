@@ -178,12 +178,15 @@ document.querySelectorAll('.feature-card').forEach((card, index) => {
 
 // === Keyboard Shortcut ===
 document.addEventListener('keydown', (e) => {
-  // Press '/' to open chat
+  // Press '/' to toggle chat
   if (e.key === '/' && !e.ctrlKey && !e.metaKey && document.activeElement.tagName !== 'INPUT') {
     e.preventDefault();
-    if (window.botpress) {
-      window.botpress.open();
-    }
+    toggleChat();
+  }
+  
+  // Press 'Escape' to close chat
+  if (e.key === 'Escape' && isChatOpen) {
+    toggleChat();
   }
 });
 
