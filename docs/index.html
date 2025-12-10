@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="styles.css">
 
   <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js"></script>
-  <script src="https://files.bpcontent.cloud/2025/12/10/03/20251210035727-LU7LRB2X.js" defer></script>  
+  <script src="https://files.bpcontent.cloud/2025/12/10/03/20251210035727-LU7LRB2X.js"></script>
 </head>
 <body>
   <div class="noise"></div>
@@ -175,26 +175,6 @@
     <div class="mini-terminal-glow"></div>
   </div>
 
-  <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js"></script>
-  <script src="https://files.bpcontent.cloud/2025/12/10/03/20251210034017-RWL0JKIE.js"></script>
-  <script>
-    // Wait for botpress to be ready, then configure for embedded mode
-    (function() {
-      function initEmbedded() {
-        if (window.botpress && typeof window.botpress.open === 'function') {
-          // Configure webchat to render in our container
-          try {
-            window.botpress.open();
-          } catch(e) {
-            console.log('Webchat init:', e);
-          }
-        } else {
-          setTimeout(initEmbedded, 500);
-        }
-      }
-      setTimeout(initEmbedded, 1000);
-    })();
-  </script>
   <script src="app.js"></script>
 </body>
 </html>
