@@ -2,9 +2,9 @@ import { Conversation, Autonomous, z } from "@botpress/runtime";
 import { spawn } from "node:child_process";
 
 /**
- * Notebook Runner Conversation
+ * Code Playground Conversation
  *
- * An interactive code assistant that can execute JavaScript and Python code.
+ * An interactive code assistant that executes JavaScript code.
  */
 export default new Conversation({
   channel: ["chat.channel", "webchat.channel"] as const,
@@ -17,17 +17,14 @@ export default new Conversation({
     const runJsTool = new Autonomous.Tool({
       name: "runJs",
       description:
-        "Execute JavaScript code using Node.js. IMPORTANT: The code must end with an expression (not a statement with semicolon) to return a value. Example: 'const f = n => n*2; f(5)' returns 10. Or use console.log() to print output.",
+        "Execute JavaScript code using Node.js. The code must end with an expression (not a statement with semicolon) to return a value. Example: 'const f = n => n*2; f(5)' returns 10.",
       input: z.object({
-        code: z.string().describe("JavaScript code. Must end with an expression to return its value, e.g. 'const x = 5; x * 2' (no semicolon at end)"),
+        code: z.string().describe("JavaScript code to execute. Must end with an expression to return its value."),
       }),
       handler: async ({ code }: { code: string }) => {
-        console.log(`\n🟡 [runJs] EXECUTING:\n${code.substring(0, 200)}${code.length > 200 ? '...' : ''}\n`);
         const startTime = Date.now();
 
-        return new Promise<{ success: boolean; result: string; code: string; language: string; executionTimeMs: number }>((resolve) => {
-          // Use -p flag to print the result of the last expression
-          // Also capture console.log output separately
+        return new Promise<{ success: boolean; result: string; code: string; executionTimeMs: number }>((resolve) => {
           const node = spawn("node", ["-p", code], { timeout: 5000 });
           let stdout = "";
           let stderr = "";
@@ -39,27 +36,19 @@ export default new Conversation({
             const result = stdout.trim() || "undefined";
             const execTime = Date.now() - startTime;
 
-            const output = {
+            resolve({
               success: exitCode === 0,
               result: exitCode === 0 ? result : stderr.trim(),
               code: code,
-              language: "javascript",
               executionTimeMs: execTime,
-            };
-            
-            console.log(`🟢 [runJs] RESULT: ${output.success ? '✓' : '✗'} (${execTime}ms)`);
-            console.log(`   → ${String(output.result).substring(0, 100)}${String(output.result).length > 100 ? '...' : ''}\n`);
-            
-            resolve(output);
+            });
           });
 
           node.on("error", (err) => {
-            console.log(`🔴 [runJs] ERROR: ${err.message}\n`);
             resolve({
               success: false,
-              result: `Failed to run Node.js: ${err.message}`,
+              result: `Error: ${err.message}`,
               code: code,
-              language: "javascript",
               executionTimeMs: Date.now() - startTime,
             });
           });
@@ -67,105 +56,32 @@ export default new Conversation({
       },
     });
 
-    // Python execution tool - spawns python3 process
-    const runPythonTool = new Autonomous.Tool({
-      name: "runPython",
-      description:
-        "Execute Python code. Use print() to output results. Libraries like math, numpy (if installed), and matplotlib (if installed) are available.",
-      input: z.object({
-        code: z.string().describe("The Python code to execute"),
-      }),
-      handler: async ({ code }: { code: string }) => {
-        console.log(`\n🟡 [runPython] EXECUTING:\n${code.substring(0, 200)}${code.length > 200 ? '...' : ''}\n`);
-        const startTime = Date.now();
-
-        return new Promise<{ success: boolean; result: string; code: string; language: string; executionTimeMs: number }>((resolve) => {
-          const wrappedCode = `
-import math
-import json
-try:
-    import numpy as np
-except ImportError:
-    pass
-try:
-    import matplotlib
-    matplotlib.use('Agg')
-    import matplotlib.pyplot as plt
-except ImportError:
-    pass
-
-${code}
-`;
-          const python = spawn("python3", ["-c", wrappedCode], { timeout: 30000 });
-          let stdout = "";
-          let stderr = "";
-
-          python.stdout.on("data", (data) => { stdout += data.toString(); });
-          python.stderr.on("data", (data) => { stderr += data.toString(); });
-
-          python.on("close", (exitCode) => {
-            const execTime = Date.now() - startTime;
-            const output = {
-              success: exitCode === 0,
-              result: exitCode === 0 ? stdout.trim() : stderr.trim(),
-              code: code,
-              language: "python",
-              executionTimeMs: execTime,
-            };
-            
-            console.log(`🟢 [runPython] RESULT: ${output.success ? '✓' : '✗'} (${execTime}ms)`);
-            console.log(`   → ${output.result.substring(0, 100)}${output.result.length > 100 ? '...' : ''}\n`);
-            
-            resolve(output);
-          });
-
-          python.on("error", (err) => {
-            console.log(`🔴 [runPython] ERROR: ${err.message}\n`);
-            resolve({
-              success: false,
-              result: `Failed to run Python: ${err.message}`,
-              code: code,
-              language: "python",
-              executionTimeMs: Date.now() - startTime,
-            });
-          });
-        });
-      },
-    });
-
-    // Run the autonomous agent with code execution tools
+    // Run the autonomous agent with JavaScript execution
     await execute({
-      instructions: `You are "Notebook Runner", an interactive code assistant.
+      instructions: `You are "Code Playground", an interactive JavaScript code assistant.
 
-TOOLS AVAILABLE:
-- runJs: Execute JavaScript code (use for quick calculations, algorithms, data transformations)
-- runPython: Execute Python code (use for math, numpy, matplotlib plots)
+You have ONE tool: runJs - Execute JavaScript code using Node.js.
 
 RULES:
-1. When asked to calculate or compute something, ALWAYS use a tool - never answer from memory
-2. After getting the tool result, format your response nicely showing the result AND the code
-3. For Fibonacci, factorials, sums, etc. - write and run the actual code
+1. When asked to calculate or compute ANYTHING, use the runJs tool - never answer from memory
+2. Write clean, efficient JavaScript code
+3. Code must END with an expression (no semicolon) to return a value
+4. If the user asks for Python, politely explain you only support JavaScript and offer to write equivalent JS code
 
-IMPORTANT FOR runJs:
-- Code must END with an expression (no semicolon) to return a value
-- GOOD: "const fact = n => n <= 1 ? 1 : n * fact(n-1); fact(5)" → returns 120
+EXAMPLES OF GOOD CODE:
+- Fibonacci: "const fib = n => n <= 1 ? n : fib(n-1) + fib(n-2); fib(20)"
+- Factorial: "const fact = n => n <= 1 ? 1 : n * fact(n-1); fact(10)"
+- Sum: "Array.from({length: 100}, (_, i) => i + 1).reduce((a, b) => a + b)"
+- Prime check: "const isPrime = n => n > 1 && [...Array(Math.floor(Math.sqrt(n)))].every((_, i) => n % (i + 2) !== 0); isPrime(997)"
 
 RESPONSE FORMAT:
 **Result:** [the computed value]
 
-\`\`\`[language]
-[the code that was executed]
-\`\`\`
-_Executed in [executionTimeMs]ms_
-
-Example response:
-**Result:** 6765
-
 \`\`\`javascript
-const fib = n => n <= 1 ? n : fib(n-1) + fib(n-2); fib(20)
+[the code you executed]
 \`\`\`
-_Executed in 28ms_`,
-      tools: [runJsTool, runPythonTool],
+_Executed in [executionTimeMs]ms_`,
+      tools: [runJsTool],
     });
   },
 });
