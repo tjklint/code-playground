@@ -144,29 +144,25 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(animateMiniTerminal, 1500);
   }
 
-  // === Toggle Chat Function ===
-  function toggleChat() {
-    if (isChatOpen) {
-      // Close the chat
-      if (window.botpress) {
-        window.botpress.close();
-      }
-      if (miniTerminal) miniTerminal.classList.remove('is-open');
-      updateStatusText('ready');
-      isChatOpen = false;
-    } else {
-      // Open the chat
-      if (window.botpress) {
-        window.botpress.open();
-      }
+  // === Scroll to Chat Function ===
+  function scrollToChat() {
+    const chatSection = document.getElementById('chat');
+    if (chatSection) {
+      chatSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
       if (miniTerminal) miniTerminal.classList.add('is-open');
       updateStatusText('connected');
       isChatOpen = true;
     }
   }
 
-  // Make toggleChat available globally for keyboard handler
+  // === Toggle Chat Function (for compatibility) ===
+  function toggleChat() {
+    scrollToChat();
+  }
+
+  // Make functions available globally
   window.toggleChat = toggleChat;
+  window.scrollToChat = scrollToChat;
 
   // === Mini Terminal Click Handler ===
   if (miniTerminal) {
@@ -183,37 +179,29 @@ document.addEventListener('DOMContentLoaded', function() {
   // === CTA Button ===
   if (ctaButton) {
     ctaButton.addEventListener('click', function() {
-      if (!isChatOpen) {
-        if (window.botpress) {
-          window.botpress.open();
-        }
-        if (miniTerminal) miniTerminal.classList.add('is-open');
-        updateStatusText('connected');
-        isChatOpen = true;
-      }
+      scrollToChat();
     });
   }
 
-  // === Webchat Event Listeners ===
-  function setupWebchatListener() {
-    if (window.botpress && typeof window.botpress.on === 'function') {
-      window.botpress.on('webchat:closed', function() {
-        if (miniTerminal) miniTerminal.classList.remove('is-open');
-        updateStatusText('ready');
-        isChatOpen = false;
+  // === Track when chat section is visible ===
+  const chatSection = document.getElementById('chat');
+  if (chatSection) {
+    const chatObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          if (miniTerminal) miniTerminal.classList.add('is-open');
+          updateStatusText('connected');
+          isChatOpen = true;
+        } else {
+          if (miniTerminal) miniTerminal.classList.remove('is-open');
+          updateStatusText('ready');
+          isChatOpen = false;
+        }
       });
-      
-      window.botpress.on('webchat:opened', function() {
-        if (miniTerminal) miniTerminal.classList.add('is-open');
-        updateStatusText('connected');
-        isChatOpen = true;
-      });
-    } else {
-      setTimeout(setupWebchatListener, 500);
-    }
+    }, { threshold: 0.3 });
+    
+    chatObserver.observe(chatSection);
   }
-
-  setTimeout(setupWebchatListener, 1000);
 
   // === Example Chips ===
   document.querySelectorAll('.example-chip').forEach(function(chip) {
@@ -235,14 +223,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
       }
       
-      if (!isChatOpen) {
-        if (window.botpress) {
-          window.botpress.open();
-        }
-        if (miniTerminal) miniTerminal.classList.add('is-open');
-        updateStatusText('connected');
-        isChatOpen = true;
-      }
+      // Scroll to chat section
+      scrollToChat();
     });
   });
 
@@ -284,13 +266,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // === Keyboard Shortcuts ===
   document.addEventListener('keydown', function(e) {
+    // Press '/' to scroll to chat
     if (e.key === '/' && !e.ctrlKey && !e.metaKey && document.activeElement.tagName !== 'INPUT') {
       e.preventDefault();
-      toggleChat();
+      scrollToChat();
     }
     
+    // Press 'Escape' to scroll back to top
     if (e.key === 'Escape' && isChatOpen) {
-      toggleChat();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   });
 
